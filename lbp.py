@@ -11,7 +11,7 @@ def get_pixel(img, center, x, y):
         pass
     return new_value
 
-def lbp(img, x, y):
+def LBP(img, x, y):
     '''
          64 | 128 |   1
         ----------------
@@ -76,7 +76,7 @@ def main():
     img_lbp = np.zeros((height, width, 3), np.uint8)
     for i in range(0, height):
         for j in range(0, width):
-            img_lbp[i, j] = lbp(img_gray, i, j)
+            img_lbp[i, j] = LBP(img_gray, i, j)
     hist_lbp = cv2.calcHist([img_lbp], [0], None, [256], [0, 256])
     output_list = []
     output_list.append({
@@ -111,8 +111,6 @@ def main():
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    print("LBP Program is finished")
-
 
 if __name__ == '__main__':
     main()
