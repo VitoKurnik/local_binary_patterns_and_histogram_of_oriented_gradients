@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 import hog
+import argparse
 
 def get_pixel(img, center, x, y):
     new_value = 0
@@ -69,8 +70,12 @@ def show_output(output_list):
     plt.show()
 
 def main():
-    image_file = 'lena.png'
-    image = cv2.imread(image_file)
+    # read the image and make it gray
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-i", "--image", required=True, help="Path to the image")
+    args = vars(ap.parse_args())
+
+    image = cv2.imread(args["image"])
     height, width, channel = image.shape
     img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -129,7 +134,7 @@ def main():
     cell_magnitude = grad_magnitude[:8, :8]
     HOG_cell_hist = hog.hog(cell_direction, cell_magnitude, hist_bins)
 
-    # show output
+    # show output of descriptors
     show_output(output_list)
 
     plt.bar(x=np.arange(9), height=HOG_cell_hist, align="center", width=0.8)
