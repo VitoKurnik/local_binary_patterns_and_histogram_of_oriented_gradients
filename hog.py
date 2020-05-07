@@ -1,4 +1,3 @@
-import skimage.io, skimage.color
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -36,7 +35,7 @@ def gradient_direction(horizontal_gradient, vertical_gradient):
     grad_direction = grad_direction%180
     return grad_direction
 
-def HOG(cell_direction, cell_magnitude, hist_bins):
+def hog(cell_direction, cell_magnitude, hist_bins):
     HOG_cell_hist = np.zeros(shape=(hist_bins.size))
     cell_size = cell_direction.shape[0]
 

@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+import hog
 
 def get_pixel(img, center, x, y):
     new_value = 0
@@ -11,7 +12,7 @@ def get_pixel(img, center, x, y):
         pass
     return new_value
 
-def LBP(img, x, y):
+def lbp(img, x, y):
     '''
          64 | 128 |   1
         ----------------
@@ -73,10 +74,11 @@ def main():
     height, width, channel = image.shape
     img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
+    # execute LBP
     img_lbp = np.zeros((height, width, 3), np.uint8)
     for i in range(0, height):
         for j in range(0, width):
-            img_lbp[i, j] = LBP(img_gray, i, j)
+            img_lbp[i, j] = lbp(img_gray, i, j)
     hist_lbp = cv2.calcHist([img_lbp], [0], None, [256], [0, 256])
     output_list = []
     output_list.append({
@@ -107,7 +109,31 @@ def main():
         "type": "histogram"
     })
 
+    # execute HOG
+    horizontal_mask = np.array([-1, 0, -1])
+    vertical_mask = np.array([[-1],
+                              [0],
+                              [1]])
+
+    horizontal_grad = hog.calculate_gradient(img_gray, horizontal_mask)
+    vertical_grad = hog.calculate_gradient(img_gray, vertical_mask)
+
+    grad_magnitude = hog.gradient_magnitude(horizontal_grad, vertical_grad)
+    grad_direction = hog.gradient_direction(horizontal_grad, vertical_grad)
+
+    grad_direction = grad_direction % 180
+    hist_bins = np.array([10, 30, 50, 70, 90, 110, 130, 150, 170])
+
+    # histogram of the first cell in the first block
+    cell_direction = grad_direction[:8, :8]
+    cell_magnitude = grad_magnitude[:8, :8]
+    HOG_cell_hist = hog.hog(cell_direction, cell_magnitude, hist_bins)
+
+    # show output
     show_output(output_list)
+
+    plt.bar(x=np.arange(9), height=HOG_cell_hist, align="center", width=0.8)
+    plt.show()
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
