@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
+
 def calculate_gradient(img, template):
     size = template.size
     new_img = np.zeros((img.shape[0]+size-1,
@@ -22,6 +23,7 @@ def calculate_gradient(img, template):
                         np.uint16((size-1)/2.0):result.shape[1]-np.uint16((size-1)/2.0)]
     return result_img
 
+
 def gradient_magnitude(horizontal_gradient, vertical_gradient):
     horizontal_gradient_square = np.power(horizontal_gradient, 2)
     vertical_gradient_square = np.power(vertical_gradient, 2)
@@ -29,11 +31,13 @@ def gradient_magnitude(horizontal_gradient, vertical_gradient):
     grad_magnitude = np.sqrt(sum_squares)
     return grad_magnitude
 
+
 def gradient_direction(horizontal_gradient, vertical_gradient):
-    grad_direction = np.arctan(vertical_gradient/(horizontal_gradient+0.00000001))
+    grad_direction = np.arctan(vertical_gradient/horizontal_gradient)
     grad_direction = np.rad2deg(grad_direction)
     grad_direction = grad_direction%180
     return grad_direction
+
 
 def hog(cell_direction, cell_magnitude, hist_bins):
     HOG_cell_hist = np.zeros(shape=(hist_bins.size))

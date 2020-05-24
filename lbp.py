@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 import hog
 import argparse
 
+
 def get_pixel(img, center, x, y):
     new_value = 0
     try:
@@ -12,6 +13,7 @@ def get_pixel(img, center, x, y):
     except:
         pass
     return new_value
+
 
 def lbp(img, x, y):
     '''
@@ -37,6 +39,7 @@ def lbp(img, x, y):
     for i in range(len(neighbor_val)) :
         val += neighbor_val[i] * power_val[i]
     return val
+
 
 def show_output(output_list):
     output_list_len = len(output_list)
@@ -68,6 +71,7 @@ def show_output(output_list):
             current_plot.set_yticklabels(ytick_list, rotation=90)
 
     plt.show()
+
 
 def main():
     # read the image and make it gray
@@ -142,6 +146,7 @@ def main():
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
 
 if __name__ == '__main__':
     main()
